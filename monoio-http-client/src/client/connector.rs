@@ -95,10 +95,11 @@ impl<C: Default> Default for TlsConnector<C> {
             )
         }));
 
-        let cfg = rustls::ClientConfig::builder()
+        let mut cfg = rustls::ClientConfig::builder()
             .with_safe_defaults()
             .with_root_certificates(root_store)
             .with_no_client_auth();
+        cfg.alpn_protocols = vec![b"h2".to_vec(), b"http/1.1".to_vec()];
 
         Self {
             inner_connector: Default::default(),
