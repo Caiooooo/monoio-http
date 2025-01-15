@@ -3,7 +3,7 @@ use std::time::Instant;
 use http::{request::Builder, Method};
 use monoio_http::common::body::{Body, FixedBody, HttpBody};
 
-#[monoio::main(driver = "uring", enable_timer = true)]
+#[monoio::main( enable_timer = true)]
 async fn main() {
     let h2_client = monoio_http_client::Builder::new()
         .http2_client()
