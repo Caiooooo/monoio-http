@@ -41,7 +41,7 @@ async fn main() {
             collected_data.extend_from_slice(&data);
         }
         let s = String::from_utf8(collected_data).unwrap();
-        println!("{}", s);
+        println!("receive string {}", s);
 
         let duration = start_time.elapsed();
         latencies.push(duration.as_millis() as u64);
