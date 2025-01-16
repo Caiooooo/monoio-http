@@ -246,16 +246,14 @@ impl<TC, K, IO: AsyncWriteRent> std::fmt::Debug for PooledConnector<TC, K, IO> {
         write!(f, "PooledConnector")
     }
 }
-pub trait NewTlsStream {
-    fn new(config: ConnectionConfig) -> Self;
-}
+
 impl<TC, K: 'static, IO: AsyncWriteRent + 'static> PooledConnector<TC, K, IO>
-where TC:NewTlsStream
+where TC : From<ConnectionConfig>
 {
     pub fn new_default(global_config: ClientGlobalConfig, c_config: ConnectionConfig) -> Self {
         Self {
             global_config,
-            transport_connector: TC::new(c_config.clone()),
+            transport_connector: TC::from(c_config.clone()),
             http_connector: HttpConnector::new(c_config),
             pool: ConnectionPool::default(),
         }

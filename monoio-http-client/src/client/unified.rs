@@ -13,7 +13,7 @@ use monoio::{
 use service_async::Param;
 use smol_str::SmolStr;
 
-use super::connector::{NewTlsStream, TcpConnector, TlsConnector, TlsStream, UnixConnector};
+use super::{connector::{TcpConnector, TlsConnector, TlsStream, UnixConnector}, ConnectionConfig};
 use crate::Connector;
 
 // TODO: make its PathBuf and SmolStr to ref
@@ -57,8 +57,8 @@ pub struct UnifiedTransportConnector {
     unix_tls: TlsConnector<UnixConnector>,
 }
 
-impl NewTlsStream for UnifiedTransportConnector{
-    fn new(config: super::ConnectionConfig) -> Self {
+impl From<ConnectionConfig> for UnifiedTransportConnector{
+    fn from(config: ConnectionConfig) -> Self {
         UnifiedTransportConnector{
             tcp_tls: TlsConnector::<TcpConnector>::new(&config),
             unix_tls: TlsConnector::<UnixConnector>::new(&config),
