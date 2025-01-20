@@ -10,6 +10,11 @@ license = "MIT/Apache-2.0"
 name = "monoio-http-client"
 version = "0.3.3"
 
+[[example]]
+name = "proxy"
+required-features = ["proxy"]
+
+
 [dependencies]
 monoio = { workspace = true }
 monoio-rustls = { workspace = true }
@@ -32,6 +37,7 @@ rustls = { version = "0.21", default-features = false, features = [
 webpki-roots = "0.25.2"
 native-tls = { version = "0.2", optional = true }
 tracing = { version = "0.1", optional = true }
+hyper = { version = "1.5.2", optional = true }
 
 [dev-dependencies]
 serde_urlencoded = "0.7.1"
@@ -44,9 +50,10 @@ default = ["time"]
 # Enable this feature to make connection pool periodically checking works.
 # You must enable time driver to use it.
 time = []
-proxy = []
+proxy = ["hyper"]
 
 # Note: rustls and native-tls cannot be enabled at the same time
 rustls-unsafe-io = ["monoio-rustls/unsafe_io"]
 native-tls = ["dep:native-tls", "monoio-native-tls"]
 logging = ["tracing", "monoio-rustls/logging"]
+hyper = ["dep:hyper"]
