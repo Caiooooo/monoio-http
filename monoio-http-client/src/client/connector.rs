@@ -65,10 +65,18 @@ where
             }
         }
         #[cfg(not(feature = "proxy"))]
-        TcpStream::connect(key).await.inspect(|io| {
-            // we will ignore the set nodelay error
-            let _ = io.set_nodelay(true);
-        })
+        {
+            use socket2::{Domain, Socket, Type};
+            let remote_addr = key.to_socket_addrs().unwrap().next().unwrap();
+            let socket = Socket::new(Domain::IPV4, Type::STREAM, None).unwrap();
+            let _ = socket.set_nodelay(true);
+            socket.connect(&remote_addr.into()).unwrap();
+            let _ = socket.set_nonblocking(true);
+            let _ = socket.set_priority(15);
+            let stream = TcpStream::from_std(std::net::TcpStream::from(socket))?;
+            let _ = stream.set_nodelay(true);
+            Ok(stream)
+        }
     }
 }
 #[cfg(feature = "proxy")]

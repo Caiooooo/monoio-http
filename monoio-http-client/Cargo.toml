@@ -24,7 +24,7 @@ bytes = { workspace = true }
 http = { workspace = true }
 thiserror = { workspace = true }
 local-sync = { workspace = true }
-
+socket2 = { git = "https://github.com/rust-lang/socket2", branch = "master", features = ["all"]}
 monoio-http = { version = "0.3.1", path = "../monoio-http" }
 
 serde = "1"
